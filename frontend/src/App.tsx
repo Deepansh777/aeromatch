@@ -1,38 +1,28 @@
-import { useEffect, useState } from "react";
+import React from "react";
+import { Routes, Route, Navigate } from "react-router-dom";
+import Navbar from "./components/Navbar";
 
-type Health = { ok: boolean; service: string; time: string };
-type Aircraft = { id: number; name: string; range_nm: number; seats: number };
+// pages
+import FindMyJet from "./pages/FindMyJet";
+import ExploreJets from "./pages/ExploreJets";
+import WhyAeromatcher from "./pages/WhyAeromatcher";
+import About from "./pages/About";
 
-export default function App() {
-  const [health, setHealth] = useState<Health | null>(null);
-  const [aircraft, setAircraft] = useState<Aircraft[]>([]);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    (async () => {
-      try {
-        const h = await fetch("/api/health").then((r) => r.json());
-        setHealth(h);
-        const a = await fetch("/api/aircraft").then((r) => r.json());
-        setAircraft(a);
-      } catch (e: any) {
-        setError(e?.message ?? "failed to fetch");
-      }
-    })();
-  }, []);
-
+function App() {
   return (
-    <main style={{ fontFamily: "system-ui, sans-serif", padding: 24 }}>
-      <h1>AeroMatch</h1>
-      {error && <p style={{ color: "crimson" }}>{error}</p>}
-      <pre>{health ? JSON.stringify(health, null, 2) : "Loading health…"}</pre>
-      <ul>
-        {aircraft.map((ac) => (
-          <li key={ac.id}>
-            {ac.name} ({ac.seats} seats)
-          </li>
-        ))}
-      </ul>
-    </main>
+    <>
+      <Navbar />
+      <Routes>
+        {/* default to why aeromatcher for the root path */}
+        <Route path="/" element={<Navigate to="/why-aeromatcher" replace />} />
+        <Route path="/match" element={<FindMyJet />} />
+        <Route path="/explore" element={<ExploreJets />} />
+        <Route path="/why-aeromatcher" element={<WhyAeromatcher />} />
+        <Route path="/about" element={<About />} />
+        {/* optional 404 can go here later */}
+      </Routes>
+    </>
   );
 }
+
+export default App;
