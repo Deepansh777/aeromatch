@@ -11,12 +11,6 @@ AeroMatch delivers clear, tailored aircraft options—fast, simple, and without 
 - docker compose up -d
 - docker compose ps
 
-### Start your backend API
+### Start your backend API + frontend
 
-- cd backend
-- npm run dev
-
-### Start your frontend app
-
-- cd frontend
 - npm run dev
